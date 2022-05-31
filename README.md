@@ -1,6 +1,6 @@
 # livraria_flutter
 
-A new Flutter project.
+Crud de uma livraria em flutter.
 
 ## Getting Started
 
