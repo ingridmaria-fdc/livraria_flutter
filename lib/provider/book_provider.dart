@@ -45,7 +45,7 @@ class BookProvider with ChangeNotifier {
 
         Map params = {
           'nome': book.name,
-          "editora": {"id": int.parse(book.publishing?.id)},
+          "editora": {"id": book.publishing?.id},
           'autor': book.author,
           'lancamento': date,
           'quantidade': book.quantity,
@@ -83,7 +83,7 @@ class BookProvider with ChangeNotifier {
       Map params = {
         'id': book.id,
         'nome': book.name,
-        'editora': {"id": int.parse(book.publishing?.id)},
+        'editora': {"id": book.publishing?.id},
         'autor': book.author,
         'lancamento': date,
         'quantidade': book.quantity,
@@ -108,18 +108,13 @@ class BookProvider with ChangeNotifier {
 
   Future<void> remove(Book book) async {
     if (book != null) {
-      String date = book.launch;
-      String day = date.substring(0, 2);
-      String month = date.substring(3, 5);
-      String year = date.substring(6, 10);
-      date = year + '-' + month + '-' + day;
 
       Map params = {
         'id': book.id,
         'nome': book.name,
-        "editora": {"id": int.parse(book.publishing?.id)},
+        "editora": {"id": book.publishing?.id},
         'autor': book.author,
-        'lancamento': date,
+        'lancamento': book.launch,
         'quantidade': book.quantity,
       };
       String jsonS = json.encode(params);

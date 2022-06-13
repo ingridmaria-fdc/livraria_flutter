@@ -43,47 +43,4 @@ class Book {
   }
 }
 
-// class Publishing {
-//   dynamic id;
-//   dynamic name;
-//   dynamic city;
 
-//   Publishing({this.id, this.name, this.city});
-
-//   Publishing.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     name = json['nome'];
-//     city = json['cidade'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['cidade'] = this.city;
-//     data['id'] = this.id;
-//     data['nome'] = this.name;
-//     return data;
-//   }
-// }
-
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:livraria_flutter/models/publishing.dart';
-
-// class Book {
-//   dynamic id;
-//   dynamic name;
-//   dynamic author;
-//   Publishing publishing;
-//   int launch;
-//   int quantity;
-
-//   Book(
-//       {this.id,
-//       required this.name,
-//       required this.publishing,
-//       required this.author,
-//       required this.launch,
-//       required this.quantity});
-// }

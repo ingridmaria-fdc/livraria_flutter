@@ -3,9 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:livraria_flutter/provider/book_provider.dart';
 import 'package:livraria_flutter/provider/publishing_provider.dart';
+import 'package:livraria_flutter/provider/rets_provider.dart';
 import 'package:livraria_flutter/provider/users_provider.dart';
 import 'package:livraria_flutter/views/Book/form_book.dart';
 import 'package:livraria_flutter/views/Publishing/form_publishing.dart';
+import 'package:livraria_flutter/views/Rets/form_edit_rets.dart';
+import 'package:livraria_flutter/views/Rets/form_save_rets.dart';
 import 'package:livraria_flutter/views/User/form_user.dart';
 import 'package:livraria_flutter/views/Book/book_page.dart';
 import 'package:livraria_flutter/views/Publishing/publishing_page.dart';
@@ -35,6 +38,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (ctx) => BookProvider(),
+          ),
+           ChangeNotifierProvider(
+            create: (ctx) => RetsProvider(),
           )
         ],
         child: MaterialApp(
@@ -56,6 +62,8 @@ class MyApp extends StatelessWidget {
               MyAppRoutes.PUBLISHING: (context) => PublishingPage(),
               MyAppRoutes.FORMPUBLISHING: (context) => FormPublishing(),
               MyAppRoutes.RETS: (context) => RetsPage(),
+              MyAppRoutes.FORMSAVERETS:(context) => FormSaveRets(),
+              MyAppRoutes.FORMEDITRETS:(context) => FormEditRets()
             }));
   }
 }

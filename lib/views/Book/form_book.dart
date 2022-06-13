@@ -1,5 +1,4 @@
-// ignore_for_file: unused_local_variable, prefer_const_constructors
-
+// ignore_for_file: unused_local_variable, prefer_const_constructors, unused_label
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:livraria_flutter/models/book.dart';
@@ -40,6 +39,7 @@ class _FormBookState extends State<FormBook> {
     return listPublishing;
   }
 
+  String? selectedDate;
   List<Publishing> listPublishing = [];
   final formKey = GlobalKey<FormState>();
   late final Map<String, String> _formData = {};
@@ -56,7 +56,7 @@ class _FormBookState extends State<FormBook> {
         _formData['id'] = book.id.toString();
         _formData['nome'] = book.name;
         _formData['autor'] = book.author;
-        _formData['editora'] = book.publishing?.name;
+        _formData['editora'] = book.publishing!.id.toString();
         _formData['lancamento'] = book.launch.toString();
         _formData['quantidade'] = book.quantity.toString();
       }
@@ -163,7 +163,7 @@ class _FormBookState extends State<FormBook> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _formData['editora'] = value!;
+                    _formData['editora'] = value.toString();
                   });
                 },
                 items: listPublishing.map((item) {
@@ -195,24 +195,25 @@ class _FormBookState extends State<FormBook> {
                   suffixIcon: Icon(Icons.calendar_month),
                 ),
                 onSaved: (value) => _formData['lancamento'] = value!,
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101));
-                  if (pickedDate != null) {
-                    String formattedDate =
-                        DateFormat('dd-MM-yyyy').format(pickedDate);
-                    setState(() {
-                      _formData['lancamento'] = formattedDate;
-                    });
-                  }
-                }
+                // onTap: () async {
+                //   DateTime? pickedDate = await showDatePicker(
+                //       context: context,
+                //       initialDate: DateTime.now(),
+                //       firstDate: DateTime(2000),
+                //       lastDate: DateTime(2101));
+                //   if (pickedDate != null) {
+                //     String formattedDate =
+                //         DateFormat('dd-MM-yyyy').format(pickedDate);
+                //     setState(() {
+                //       _formData['lancamento'] = formattedDate;
+                //     });
+                //   }
+                // }
               ),
               SizedBox(
                 height: 15,
               ),
+              
               TextFormField(
                 initialValue: _formData['quantidade'],
                 autovalidateMode: AutovalidateMode.onUserInteraction,

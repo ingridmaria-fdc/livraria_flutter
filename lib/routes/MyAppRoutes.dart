@@ -7,4 +7,6 @@ class MyAppRoutes {
   static const PUBLISHING = 'publishing-page';
   static const FORMPUBLISHING = 'form-publishing';
   static const RETS = 'rets-page';
+  static const FORMSAVERETS = 'form-save-rets';
+  static const FORMEDITRETS = 'form-edit-rets';
 }
