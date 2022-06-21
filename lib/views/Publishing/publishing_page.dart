@@ -37,6 +37,7 @@ class _PublishingPageState extends State<PublishingPage> {
       appBar: AppBar(
         title: Text('Editoras'),
         backgroundColor: Colors.blue[700],
+        leading: Icon(Icons.align_vertical_bottom_sharp),
         actions: [
           IconButton(
             icon: Icon(Icons.add_circle),
@@ -46,6 +47,12 @@ class _PublishingPageState extends State<PublishingPage> {
           )
         ],
       ),
+      //  floatingActionButton: FloatingActionButton(           
+      //   onPressed: () {
+      //       Navigator.of(context).pushNamed(MyAppRoutes.FORMPUBLISHING);
+      //   },
+      //   child: Icon(Icons.add),
+      // ),
       body: FutureBuilder(
           future: publishing.loadPublishing(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {

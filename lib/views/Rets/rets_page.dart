@@ -32,6 +32,7 @@ class _RetsPageState extends State<RetsPage> {
       appBar: AppBar(
         title: Text('Aluguéis'),
         backgroundColor: Colors.blue[700],
+        leading: Icon(Icons.contact_page),
          actions: [
           IconButton(
             icon: Icon(Icons.add_circle),

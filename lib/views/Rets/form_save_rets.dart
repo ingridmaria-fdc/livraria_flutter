@@ -85,8 +85,8 @@ class _FormSaveRetsState extends State<FormSaveRets> {
       if (arg != null) {
         final rets = arg as Rets;
         _formData['id'] = rets.id.toString();
-        _formData['livro'] = rets.book?.name;
-        _formData['usuario'] = rets.user?.name;
+        _formData['livro'] = rets.book!.id.toString();
+        _formData['usuario'] = rets.user!.id.toString();
         _formData['data_aluguel'] = rets.rent_date.toString();
         _formData['data_previsao'] = rets.forecast_date.toString();
         _formData['data_devolucao'] = rets.return_date.toString();
@@ -177,49 +177,47 @@ class _FormSaveRetsState extends State<FormSaveRets> {
               SizedBox(
                 height: 15,
               ),
+
               TextFormField(
-                  initialValue: _formData['data_aluguel'],
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      return 'Este campo não pode ser nulo';
-                    }
-                    if (text.length < 3) {
-                      return 'O mínimo de caracteres é 3';
-                    }
-                  },
-                  decoration: InputDecoration(
+                initialValue: _formData['data_aluguel'],
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return 'Este campo não pode ser nulo';
+                  }
+                  
+                },
+                decoration: InputDecoration(
                     labelText: 'Data do aluguel*',
                     hintText: '',
                     suffixIcon: Icon(Icons.calendar_month),
                   ),
-                  onSaved: (value) => _formData['data_aluguel'] = value!,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101));
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
-                      setState(() {
-                        _formData['data_aluguel'] = formattedDate;
-                      });
-                    }
-                  }),
+               onSaved: (value) => _formData['data_aluguel'] = value!,
+                // onTap: () async {
+                //   DateTime? pickedDate = await showDatePicker(
+                //       context: context,
+                //       initialDate: DateTime.now(),
+                //       firstDate: DateTime(2000),
+                //       lastDate: DateTime(2101));
+                //   if (pickedDate != null) {
+                //     String formattedDate =
+                //         DateFormat('dd-MM-yyyy').format(pickedDate);
+                //     setState(() {
+                //       _formData['lancamento'] = formattedDate;
+                //     });
+                //   }
+                // }
+              ),
               SizedBox(
                 height: 15,
               ),
+
               TextFormField(
                   initialValue: _formData['data_previsao'],
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (text) {
                     if (text == null || text.isEmpty) {
                       return 'Este campo não pode ser nulo';
-                    }
-                    if (text.length < 3) {
-                      return 'O mínimo de caracteres é 3';
                     }
                   },
                   decoration: InputDecoration(
@@ -228,49 +226,25 @@ class _FormSaveRetsState extends State<FormSaveRets> {
                     suffixIcon: Icon(Icons.calendar_month),
                   ),
                   onSaved: (value) => _formData['data_previsao'] = value!,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101));
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
-                      setState(() {
-                        _formData['data_previsao'] = formattedDate;
-                      });
-                    }
-                  }),
-              SizedBox(
+                  // onTap: () async {
+                  //   DateTime? pickedDate = await showDatePicker(
+                  //       context: context,
+                  //       initialDate: DateTime.now(),
+                  //       firstDate: DateTime(2000),
+                  //       lastDate: DateTime(2101));
+                  //   if (pickedDate != null) {
+                  //     String formattedDate =
+                  //         DateFormat('dd-MM-yyyy').format(pickedDate);
+                  //     setState(() {
+                  //       _formData['data_previsao'] = formattedDate;
+                  //     });
+                  //   }
+                  // }
+                  ),
+                SizedBox(
                 height: 15,
               ),
-              // TextFormField(
-              //     initialValue: _formData['data_devolucao'],
-              //     decoration: InputDecoration(
-              //       labelText: 'Data da Devolução*',
-              //       hintText: '',
-              //       suffixIcon: Icon(Icons.calendar_month),
-              //     ),
-              //     onSaved: (value) => _formData['data_devolucao'] = value!,
-              //     onTap: () async {
-              //       DateTime? pickedDate = await showDatePicker(
-              //           context: context,
-              //           initialDate: DateTime.now(),
-              //           firstDate: DateTime(2000),
-              //           lastDate: DateTime(2101));
-              //       if (pickedDate != null) {
-              //         String formattedDate =
-              //             DateFormat('dd-MM-yyyy').format(pickedDate);
-              //         setState(() {
-              //           _formData['data_devolucao'] = formattedDate;
-              //         });
-              //       }
-              //     }),
-              // SizedBox(
-              //   height: 15,
-              // ),
-              SizedBox(
+               SizedBox(
                 width: double.infinity,
                 height: 45,
                 child: ElevatedButton.icon(
@@ -282,16 +256,20 @@ class _FormSaveRetsState extends State<FormSaveRets> {
                       ),
                     ),
                     onPressed: () {
-                      //  if (formKey.currentState!.validate()) {
-                      //   formKey.currentState!.save();
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
 
                         if (_formData['id'] != null) {
-                          Provider.of<RetsProvider>(context, listen: false)
+                         Provider.of<RetsProvider>(context, listen: false)
                               .update(Rets(
                                   id: _formData['id'],                                  
                                   book: Book(
                                       id: _formData['livro'],
                                       name: "",
+                                      publishing: Publishing(
+                                      id: _formData['editora'],
+                                      name: "",
+                                      city: ""),
                                       author: "",
                                       launch: "",
                                       quantity: ""
@@ -305,28 +283,43 @@ class _FormSaveRetsState extends State<FormSaveRets> {
                                       ),
                                   rent_date: _formData['data_aluguel'],
                                   forecast_date: _formData['data_previsao'],
-                                  return_date: _formData['data_devolucao']));
+                                  return_date: _formData['data_devolucao']
+                                  ));
                         } else {
-                          Provider.of<BookProvider>(context, listen: false)
-                              .save(Book(
-                                  name: _formData['nome'],
-                                  publishing: Publishing(
+                          Provider.of<RetsProvider>(context, listen: false)
+                              .save(Rets(
+                                 book: Book(
+                                      id: _formData['livro'],
+                                      name: "",
+                                      publishing: Publishing(
                                       id: _formData['editora'],
                                       name: "",
                                       city: ""),
-                                  author: _formData['autor'],
-                                  launch: _formData['lancamento'],
-                                  quantity: _formData['quantidade']));
+                                      author: "",
+                                      launch: "",
+                                      quantity: ""
+                                      ),
+                                  user: User(
+                                      id: _formData['livro'],
+                                      name: "",
+                                      address: "",
+                                      city: "",
+                                      email: ""
+                                      ),
+                                  rent_date: _formData['data_aluguel'],
+                                  forecast_date: _formData['data_previsao'],
+                                  return_date: _formData['data_devolucao']
+                                  ));
                         }
 
-                      Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      }
                     },
                     icon: Icon(Icons.save),
                     label: Text(
                       'Salvar',
                       style: TextStyle(fontSize: 20),
                     )),
-  
               ),
             ],
           ),

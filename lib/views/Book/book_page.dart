@@ -35,6 +35,7 @@ class _BookPageState extends State<BookPage> {
       appBar: AppBar(
         title: Text('Livros'),
         backgroundColor: Colors.blue[700],
+        leading: Icon(Icons.book),
         actions: [
           IconButton(
             icon: Icon(Icons.add_circle),
@@ -44,6 +45,12 @@ class _BookPageState extends State<BookPage> {
           )
         ],
       ),
+      // floatingActionButton: FloatingActionButton(           
+      //   onPressed: () {
+      //       Navigator.of(context).pushNamed(MyAppRoutes.FORMBOOK);
+      //   },
+      //   child: Icon(Icons.add),
+      // ),
       body: FutureBuilder(
           future: book.loadBooks(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {

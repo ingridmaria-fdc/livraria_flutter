@@ -53,12 +53,18 @@ class RetsProvider with ChangeNotifier {
         String forecastYear = forecastDate.substring(6, 10);
         forecastDate = forecastYear + '-' + forecastMonth + '-' + forecastDay;
 
+        String returnDate = rets.rent_date;
+        String returnDay = returnDate.substring(0, 2);
+        String returnMonth = returnDate.substring(3, 5);
+        String returnYear = returnDate.substring(6, 10);
+        returnDate = year + '-' + month + '-' + day;
+
         Map params = {         
-          "livro": {"id": int.parse(rets.book?.id)},
-          "usuario": {"id": int.parse(rets.user?.id)},
-          'data_aluguel': rets.rent_date,
-          'data_previsao': rets.forecast_date,
-          'data_devolucao': rets.return_date,
+          "livro": {"id": rets.book?.id},
+          "usuario": {"id": rets.user?.id},
+          'data_aluguel': rentDate,
+          'data_previsao': forecastDate,  
+          'data_devolucao': returnDate,      
         };
 
         String jsonS = json.encode(params);
@@ -84,26 +90,20 @@ class RetsProvider with ChangeNotifier {
 
   Future<void> update(Rets rets) async {
     if (rets != null) {
-      String rentDate = rets.rent_date;
-      String day = rentDate.substring(0, 2);
-      String month = rentDate.substring(3, 5);
-      String year = rentDate.substring(6, 10);
-      rentDate = year + '-' + month + '-' + day;
+      String returnDate = rets.rent_date;
+      String day = returnDate.substring(0, 2);
+      String month = returnDate.substring(3, 5);
+      String year = returnDate.substring(6, 10);
+      returnDate = year + '-' + month + '-' + day;
 
-      String forecastDate = rets.forecast_date;
-      String forecastDay = forecastDate.substring(0, 2);
-      String forecastMonth = forecastDate.substring(3, 5);
-      String forecastYear = forecastDate.substring(6, 10);
-      forecastDate = forecastYear + '-' + forecastMonth + '-' + forecastDay;
 
        Map params = {  
-          "id": rets.id,       
-          "livro": {"id": int.parse(rets.book?.id)},
-          "usuario": {"id": int.parse(rets.user?.id)},
+          "id": rets.id,   
+          "livro": {"id": rets.book?.id},
+          "usuario": {"id": rets.user?.id},
           'data_aluguel': rets.rent_date,
-          'data_previsao': rets.forecast_date,
-          'data_devolucao': rets.return_date,
-          
+          'data_previsao': rets.forecast_date,            
+          'data_devolucao': returnDate,
         };
       String jsonS = json.encode(params);
 
@@ -123,36 +123,31 @@ class RetsProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> remove(Book book) async {
-  //   if (book != null) {
-  //     String date = book.launch;
-  //     String day = date.substring(0, 2);
-  //     String month = date.substring(3, 5);
-  //     String year = date.substring(6, 10);
-  //     date = year + '-' + month + '-' + day;
+  Future<void> remove(Rets rets) async {
+    if (rets != null) {     
 
-  //     Map params = {
-  //       'id': book.id,
-  //       'nome': book.name,
-  //       "editora": {"id": int.parse(book.publishing?.id)},
-  //       'autor': book.author,
-  //       'lancamento': date,
-  //       'quantidade': book.quantity,
-  //     };
-  //     String jsonS = json.encode(params);
-  //     final response = await http.delete(Uri.parse(_baseURL + '/livro'),
-  //         headers: {
-  //           "Accept": "application/json",
-  //           "Content-Type": "application/json"
-  //         },
-  //         body: jsonS,
-  //         encoding: Encoding.getByName("utf-8"));
-  //     if (response.statusCode == 200) {
-  //       asuka.AsukaSnackbar.success("Livro deletado com sucesso").show();
-  //     } else {
-  //       asuka.AsukaSnackbar.alert("Erro ao tentar deletar este livro").show();
-  //     }
-  //     notifyListeners();
-  //   }
-  // }
+      Map params = {
+        "id": rets.id, 
+        "livro": {"id": rets.book?.id},
+        "usuario": {"id": rets.user?.id},
+        'data_aluguel': rets.rent_date,
+        'data_previsao': rets.forecast_date,
+        'data_devolucao': rets.return_date,
+      };
+      String jsonS = json.encode(params);
+      final response = await http.delete(Uri.parse(_baseURL + '/aluguel'),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: jsonS,
+          encoding: Encoding.getByName("utf-8"));
+      if (response.statusCode == 200) {
+        asuka.AsukaSnackbar.success("Aluguel deletado com sucesso").show();
+      } else {
+        asuka.AsukaSnackbar.alert("Erro ao tentar deletar este aluguel").show();
+      }
+      notifyListeners();
+    }
+  }
 }

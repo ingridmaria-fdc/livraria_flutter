@@ -21,57 +21,10 @@ class FormEditRets extends StatefulWidget {
 
 class _FormEditRetsState extends State<FormEditRets> {
   @override
-  void initState() {
-    loadBooks();
-    loadUsers();
+  void initState() {    
     super.initState();
   }
 
-  Future<List<Book>> loadBooks() async {
-    final _baseURL = 'https://locadoradelivros-api.herokuapp.com/api';
-
-    final response = await http.get(Uri.parse(_baseURL + '/livros'));
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
-
-    for (var livro in data) {
-      setState(() {
-        listBooks.add(Book(
-          id: livro['id'].toString(),
-          name: livro['nome'],
-          author: livro['autor'],
-          publishing: livro['editora'] != null
-              ? Publishing.fromJson(livro['editora'])
-              : null,
-          launch: livro['lancamento'],
-          quantity: livro['quantidade'],
-        ));
-      });
-    }
-
-    return listBooks;
-  }
-
-  Future<List<User>> loadUsers() async {
-    final _baseURL = 'https://locadoradelivros-api.herokuapp.com/api';
-
-    final response = await http.get(Uri.parse(_baseURL + '/usuarios'));
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
-
-    for (var usuario in data) {
-      setState(() {
-        listUsers.add(User(
-            id: usuario['id'].toString(),
-            name: usuario['nome'],
-            address: usuario['endereco'],
-            email: usuario['email'],
-            city: usuario['cidade']));
-      });
-    }
-    return listUsers;
-  }
-
-  List<Book> listBooks = [];
-  List<User> listUsers = [];
   final formKey = GlobalKey<FormState>();
   late final Map<String, String> _formData = {};
   late final String? Function(String? text)? validator;
@@ -85,8 +38,8 @@ class _FormEditRetsState extends State<FormEditRets> {
       if (arg != null) {
         final rets = arg as Rets;
         _formData['id'] = rets.id.toString();
-        _formData['livro'] = rets.book?.name;
-        _formData['usuario'] = rets.user?.name;
+        _formData['livro'] = rets.book!.id.toString();
+        _formData['usuario'] = rets.user!.id.toString();
         _formData['data_aluguel'] = rets.rent_date.toString();
         _formData['data_previsao'] = rets.forecast_date.toString();
         _formData['data_devolucao'] = rets.return_date.toString();
@@ -122,34 +75,40 @@ class _FormEditRetsState extends State<FormEditRets> {
         child: Padding(
           padding: EdgeInsets.all(15),
           child: Column(
-            children: [
-              
+            children: [            
               TextFormField(
                   initialValue: _formData['data_devolucao'],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return 'Este campo não pode ser nulo';
+                    }
+                  },
                   decoration: InputDecoration(
                     labelText: 'Data da Devolução*',
                     hintText: '',
                     suffixIcon: Icon(Icons.calendar_month),
                   ),
-                  onSaved: (value) => _formData['data_devolucao'] = value!,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101));
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
-                      setState(() {
-                        _formData['data_devolucao'] = formattedDate;
-                      });
-                    }
-                  }),
-              SizedBox(
+                  onSaved: (value) => _formData['data_previsao'] = value!,
+                  // onTap: () async {
+                  //   DateTime? pickedDate = await showDatePicker(
+                  //       context: context,
+                  //       initialDate: DateTime.now(),
+                  //       firstDate: DateTime(2000),
+                  //       lastDate: DateTime(2101));
+                  //   if (pickedDate != null) {
+                  //     String formattedDate =
+                  //         DateFormat('dd-MM-yyyy').format(pickedDate);
+                  //     setState(() {
+                  //       _formData['data_previsao'] = formattedDate;
+                  //     });
+                  //   }
+                  // }
+                  ),
+                SizedBox(
                 height: 15,
               ),
-              SizedBox(
+               SizedBox(
                 width: double.infinity,
                 height: 45,
                 child: ElevatedButton.icon(
@@ -161,16 +120,20 @@ class _FormEditRetsState extends State<FormEditRets> {
                       ),
                     ),
                     onPressed: () {
-                      //  if (formKey.currentState!.validate()) {
-                      //   formKey.currentState!.save();
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
 
                         if (_formData['id'] != null) {
-                          Provider.of<RetsProvider>(context, listen: false)
+                         Provider.of<RetsProvider>(context, listen: false)
                               .update(Rets(
                                   id: _formData['id'],                                  
                                   book: Book(
                                       id: _formData['livro'],
                                       name: "",
+                                      publishing: Publishing(
+                                      id: _formData['editora'],
+                                      name: "",
+                                      city: ""),
                                       author: "",
                                       launch: "",
                                       quantity: ""
@@ -184,28 +147,43 @@ class _FormEditRetsState extends State<FormEditRets> {
                                       ),
                                   rent_date: _formData['data_aluguel'],
                                   forecast_date: _formData['data_previsao'],
-                                  return_date: _formData['data_devolucao']));
+                                  return_date: _formData['data_devolucao']
+                                  ));
                         } else {
-                          Provider.of<BookProvider>(context, listen: false)
-                              .save(Book(
-                                  name: _formData['nome'],
-                                  publishing: Publishing(
+                          Provider.of<RetsProvider>(context, listen: false)
+                              .save(Rets(
+                                 book: Book(
+                                      id: _formData['livro'],
+                                      name: "",
+                                      publishing: Publishing(
                                       id: _formData['editora'],
                                       name: "",
                                       city: ""),
-                                  author: _formData['autor'],
-                                  launch: _formData['lancamento'],
-                                  quantity: _formData['quantidade']));
+                                      author: "",
+                                      launch: "",
+                                      quantity: ""
+                                      ),
+                                  user: User(
+                                      id: _formData['livro'],
+                                      name: "",
+                                      address: "",
+                                      city: "",
+                                      email: ""
+                                      ),
+                                  rent_date: _formData['data_aluguel'],
+                                  forecast_date: _formData['data_previsao'],
+                                  return_date: _formData['data_devolucao']
+                                  ));
                         }
 
-                      Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      }
                     },
                     icon: Icon(Icons.save),
                     label: Text(
                       'Salvar',
                       style: TextStyle(fontSize: 20),
                     )),
-  
               ),
             ],
           ),

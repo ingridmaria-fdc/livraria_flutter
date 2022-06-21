@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:livraria_flutter/models/rets.dart';
+import 'package:livraria_flutter/provider/rets_provider.dart';
 import 'package:livraria_flutter/routes/MyAppRoutes.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,6 @@ class RetsList extends StatelessWidget {
     }
   }
 
-  
 
   @override
   Widget build(BuildContext context) {
@@ -80,15 +80,15 @@ class RetsList extends StatelessWidget {
                       TextButton(
                         style: TextButton.styleFrom(),
                         onPressed: () {
-                          // Provider.of<BookProvider>(context, listen: false)
-                          //     .remove(Book(
-                          //   id: book.id,
-                          //   name: book.name,
-                          //   publishing: book.publishing?.name,
-                          //   author: book.author,
-                          //   launch: book.launch,
-                          //   quantity: book.quantity,
-                          // ));
+                          Provider.of<RetsProvider>(context, listen: false)
+                              .remove(Rets(
+                              id: rets.id,                                    
+                              book: rets.book, 
+                              user: rets.user, 
+                              rent_date: rets.rent_date, 
+                              forecast_date: rets.forecast_date, 
+                              return_date: rets.return_date
+                              ));                        
                           Navigator.pop(ctx);
                         },
                         child: const Text('Sim'),
@@ -123,12 +123,11 @@ class RetsList extends StatelessWidget {
         child: Text(rets.book?.name)
         ),
         subtitle: Align(
-          alignment: Alignment.bottomLeft,          
-          child: chip()),
+        alignment: Alignment.bottomLeft,          
+        child: chip()),
         trailing: Container(
           width: 65,         
-          child: 
-          rets.return_date == null ?
+          child:rets.return_date == null ?
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

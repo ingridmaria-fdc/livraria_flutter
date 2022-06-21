@@ -33,6 +33,7 @@ class _UserPageState extends State<UserPage> {
       appBar: AppBar(
         title: Text('Usuários'),
         backgroundColor: Colors.blue[700],
+        leading: Icon(Icons.person),
         actions: [
           IconButton(
             icon: Icon(Icons.add_circle),
@@ -42,6 +43,12 @@ class _UserPageState extends State<UserPage> {
           )
         ],
       ),
+      // floatingActionButton: FloatingActionButton(           
+      //   onPressed: () {
+      //       Navigator.of(context).pushNamed(MyAppRoutes.FORMUSERS);
+      //   },
+      //   child: Icon(Icons.add),
+      // ),
       body: FutureBuilder(
           future: user.loadUser(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
